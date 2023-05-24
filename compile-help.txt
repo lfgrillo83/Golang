@@ -1,0 +1,30 @@
+#
+#compilar (cross-compile) DLL (no linux)
+#
+GOOS=windows GOARCH=amd64 CGO_ENABLED=1 CC=x86_64-w64-mingw32-gcc go build -ldflags -H=windowsgui -buildmode=c-shared -o rshell.dll revshdll.go
+
+
+#
+#compilar um executável para windows, no windows
+#
+go build -ldflags -H=windowsgui .\revshell.go
+
+
+#
+#compilar um executável(elf) linux no windows
+#
+$env:GOOS='linux'; go build .\d3c.go
+
+
+#
+#compilar um executável(exe) windows no linux
+#
+GOOS='windows'  go build -ldflags -H=windowsgui ./revshell.go
+
+
+#
+#"offensive golang - Strip the Binary! (omitir debug symbols)"
+# 	- variable names converted to addresses
+#	- makes binaries smaller
+#
+go build -ldflags="-s -w" rshell.go
